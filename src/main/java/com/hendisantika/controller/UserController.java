@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * Project : spring-boot-google-recaptcha
@@ -51,5 +53,12 @@ public class UserController {
         }
 
         return "registerUser";
+    }
+
+    @GetMapping
+    public String getAllUsers(Model model) {
+        List<User> users = userService.getAllUsers();
+        model.addAttribute("list", users);
+        return "listUsers";
     }
 }
