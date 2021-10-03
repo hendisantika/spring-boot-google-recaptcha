@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Created by IntelliJ IDEA.
@@ -30,6 +33,23 @@ public class UserController {
     @GetMapping("/register")
     public String registerUser(Model model) {
         model.addAttribute("user", new User());
+        return "registerUser";
+    }
+
+    @PostMapping
+    public String saveUser(
+            @ModelAttribute User user,
+            Model model,
+            @RequestParam("g-recaptcha-response") String captcha
+    ) {
+        if (validator.isValidCaptcha(captcha)) {
+            Integer id = userService.createUser(user);
+            model.addAttribute("message", "User with id : '" + id + "' Saved Successfully !");
+            model.addAttribute("user", new User());
+        } else {
+            model.addAttribute("message", "Please validate captcha first");
+        }
+
         return "registerUser";
     }
 }
