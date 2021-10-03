@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Insert title here</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <script async defer src="https://www.google.com/recaptcha/api.js"></script>
+</head>
+<body>
+<div class="container p-3 my-3 border">
+    <div class="card-header bg-info text-black">
+        <h3>USER REGISTRATION</h3>
+    </div>
+    <div class="card-body">
+        <form method="POST" th:action="@{/users}" th:object="${user}">
+            <div class="row">
+                <div class="col-2">NAME</div>
+                <div class="col-4">
+                    <input class="form-control" th:field="*{name}" type="text"/>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-2">EMAIL</div>
+                <div class="col-4">
+                    <input class="form-control" th:field="*{email}" type="text"/>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-2"> Validate reCAPTCHA</div>
+                <div class="col-4">
+                    <div class="g-recaptcha" data-sitekey="6LdzW5EUAAAAANBNd9GcxekgzLulPcLweZ6VpLp8"></div>
+                </div>
+            </div>
+
+            <br/>
+            <input class="btn btn-success" type="submit" value="Register"/>
+            <a class="btn btn-info" th:href="@{/users}">View All Users</a>
+        </form>
+    </div>
+    <div class="card-footer bg-info text-black">
+        <span th:text="${message}"></span>
+    </div>
+</div>
+
+</body>
+</html>
