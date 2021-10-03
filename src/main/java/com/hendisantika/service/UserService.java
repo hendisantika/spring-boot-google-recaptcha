@@ -5,6 +5,8 @@ import com.hendisantika.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * Project : spring-boot-google-recaptcha
@@ -22,5 +24,10 @@ public class UserService {
     public Integer createUser(User user) {
         Integer userId = userRepository.save(user).getId();
         return userId;
+    }
+
+    public List<User> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users;
     }
 }
