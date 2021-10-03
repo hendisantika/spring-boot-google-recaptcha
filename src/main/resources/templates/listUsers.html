@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Insert title here</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container p-3 my-3 border">
+    <div class="card-header bg-info text-black">
+        <h3>USER LIST</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>EMAIL</th>
+            </tr>
+            <tr th:each="ob:${list}">
+                <td th:text="${ob.id}"></td>
+                <td th:text="${ob.name}"></td>
+                <td th:text="${ob.email}"></td>
+            </tr>
+        </table>
+    </div>
+    <br/>
+    <a class="btn btn-success" th:href="@{/users/register}">Add User</a>
+</div>
+</body>
+</html>
