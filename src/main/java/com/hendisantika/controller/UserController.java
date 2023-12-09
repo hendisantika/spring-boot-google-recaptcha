@@ -1,16 +1,14 @@
 package com.hendisantika.controller;
 
+import com.hendisantika.dto.UserDTO;
 import com.hendisantika.entity.User;
 import com.hendisantika.service.UserService;
 import com.hendisantika.validator.CaptchaValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,25 +23,34 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/users")
+@RequiredArgsConstructor
+@Slf4j
 public class UserController {
-    @Autowired
-    private UserService userService;
 
-    @Autowired
-    private CaptchaValidator validator;
+    private final UserService userService;
+
+    private final CaptchaValidator validator;
 
     @GetMapping("/register")
-    public String registerUser(Model model) {
-        model.addAttribute("user", new User());
-        return "registerUser";
+    public String registerUser(Model model, @RequestParam(value = "version") String version) {
+        model.addAttribute("user", new UserDTO());
+        model.addAttribute("version", version);
+        log.info("version : " + version);
+        String path = (version.equals("v2") ? "v2/registerUser" : "v3/registerUser");
+        log.info("path : " + path);
+        return path;
     }
 
     @PostMapping
     public String saveUser(
-            @ModelAttribute User user,
+            @ModelAttribute UserDTO user,
             Model model,
             @RequestParam("g-recaptcha-response") String captcha
     ) {
+        log.info("version : " + user.getVersion());
+//        String path = (user.getVersion().equals("v2") || user.getVersion().equals("v2,")) ? "v2/registerUser" : "v3/registerUser";
+//        String path = (version.equals("v2")) ? "v2/registerUser" : "v3/registerUser";
+//        log.info("path : " + path);
         if (validator.isValidCaptcha(captcha)) {
             Integer id = userService.createUser(user);
             model.addAttribute("message", "User with id : '" + id + "' Saved Successfully !");
@@ -52,7 +59,7 @@ public class UserController {
             model.addAttribute("message", "Please validate captcha first");
         }
 
-        return "registerUser";
+        return "redirect:/users";
     }
 
     @GetMapping

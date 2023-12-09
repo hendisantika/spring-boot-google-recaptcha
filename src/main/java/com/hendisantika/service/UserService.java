@@ -1,5 +1,6 @@
 package com.hendisantika.service;
 
+import com.hendisantika.dto.UserDTO;
 import com.hendisantika.entity.User;
 import com.hendisantika.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public Integer createUser(User user) {
-        Integer userId = userRepository.save(user).getId();
+    public Integer createUser(UserDTO user) {
+        User entity = User.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
+        Integer userId = userRepository.save(entity).getId();
         return userId;
     }
 

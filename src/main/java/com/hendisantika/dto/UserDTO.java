@@ -1,9 +1,5 @@
-package com.hendisantika.entity;
+package com.hendisantika.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,19 +11,17 @@ import lombok.NoArgsConstructor;
  * User: hendisantika
  * Email: hendisantika@gmail.com
  * Telegram : @hendisantika34
- * Date: 04/10/21
- * Time: 05.56
+ * Date: 12/3/23
+ * Time: 15:38
+ * To change this template use File | Settings | File Templates.
  */
 @Data
-@Entity
-@Table(name = "t_user")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User {
-    @Id
-    @GeneratedValue
+public class UserDTO {
     private Integer id;
     private String name;
     private String email;
+    private String version;
 }
