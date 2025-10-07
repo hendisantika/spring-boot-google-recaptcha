@@ -28,15 +28,19 @@ public class CaptchaValidator {
     private String V3_SECRET_KEY;
 
     public boolean isValidCaptcha(String captcha) {
+        return isValidCaptcha(captcha, "v2");
+    }
+
+    public boolean isValidCaptcha(String captcha, String version) {
         String url = "https://www.google.com/recaptcha/api/siteverify";
-//        String params = "?secret=6LdzW5EUAAAAAK-i3g0r8ok09NFbQzEjwfGd016u&response=" + captcha;
-        String params = "?secret=" + V2_SECRET_KEY + "&response=" + captcha;
+        String secretKey = "v3".equalsIgnoreCase(version) ? V3_SECRET_KEY : V2_SECRET_KEY;
+        String params = "?secret=" + secretKey + "&response=" + captcha;
         String completeUrl = url + params;
         CaptchaResponse resp = restTemplate.postForObject(completeUrl, null, CaptchaResponse.class);
-        log.info("captcha: " + captcha);
-        log.info("V2_SECRET_KEY: " + V2_SECRET_KEY);
-        log.info("V3_SECRET_KEY: " + V3_SECRET_KEY);
-        log.info("Response: " + resp);
-        return resp.isSuccess();
+        log.info("captcha: {}", captcha);
+        log.info("version: {}", version);
+        log.info("secretKey: {}", secretKey);
+        log.info("Response: {}", resp);
+        return resp != null && resp.isSuccess();
     }
 }
