@@ -25,7 +25,7 @@ User Register Page
 
 ![User Register Page](img/add_v2.png)
 
-![User Register Page](img/add_v3.png)
+![User Register Page](img/add_V3.png)
 
 H2 Page
 
