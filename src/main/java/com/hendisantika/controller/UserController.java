@@ -1,5 +1,6 @@
 package com.hendisantika.controller;
 
+import com.hendisantika.config.RecaptchaConfig;
 import com.hendisantika.dto.UserDTO;
 import com.hendisantika.entity.User;
 import com.hendisantika.service.UserService;
@@ -8,7 +9,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -31,6 +36,8 @@ public class UserController {
 
     private final CaptchaValidator validator;
 
+    private final RecaptchaConfig recaptchaConfig;
+
     @GetMapping("/register")
     public String registerUser(Model model, @RequestParam(value = "version") String version) {
         model.addAttribute("user", new UserDTO());
@@ -38,6 +45,14 @@ public class UserController {
         log.info("version : " + version);
         String path = (version.equals("v2") ? "v2/registerUser" : "v3/registerUser");
         log.info("path : " + path);
+
+        // Add the appropriate site key based on version
+        if (version.equals("v2")) {
+            model.addAttribute("siteKey", recaptchaConfig.getV2SiteKey());
+        } else {
+            model.addAttribute("siteKey", recaptchaConfig.getV3SiteKey());
+        }
+
         return path;
     }
 
@@ -48,10 +63,9 @@ public class UserController {
             @RequestParam("g-recaptcha-response") String captcha
     ) {
         log.info("version : " + user.getVersion());
-//        String path = (user.getVersion().equals("v2") || user.getVersion().equals("v2,")) ? "v2/registerUser" : "v3/registerUser";
-//        String path = (version.equals("v2")) ? "v2/registerUser" : "v3/registerUser";
-//        log.info("path : " + path);
-        if (validator.isValidCaptcha(captcha)) {
+        String version = user.getVersion() != null ? user.getVersion() : "v2";
+
+        if (validator.isValidCaptcha(captcha, version)) {
             Integer id = userService.createUser(user);
             model.addAttribute("message", "User with id : '" + id + "' Saved Successfully !");
             model.addAttribute("user", new User());
