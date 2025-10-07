@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>User Registration - reCAPTCHA v3</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <script th:src="'https://www.google.com/recaptcha/api.js?render=' + ${siteKey}"></script>
+</head>
+<body>
+<div class="container p-3 my-3 border">
+    <div class="card-header bg-info text-black">
+        <h3>USER REGISTRATION (reCAPTCHA v3)</h3>
+    </div>
+    <div class="card-body">
+        <form id="registrationForm" method="POST" th:action="@{/users}" th:object="${user}">
+            <div class="row">
+                <div class="col-2">NAME</div>
+                <div class="col-4">
+                    <input class="form-control" required th:field="*{name}" type="text"/>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-2">EMAIL</div>
+                <div class="col-4">
+                    <input class="form-control" required th:field="*{email}" type="email"/>
+                </div>
+            </div>
+            <br/>
+            <input id="g-recaptcha-response" name="g-recaptcha-response" type="hidden"/>
+            <input name="version" type="hidden" value="v3"/>
+            <br/>
+            <button class="btn btn-success" type="submit">Register</button>
+            <a class="btn btn-info" th:href="@{/users}">View All Users</a>
+        </form>
+    </div>
+    <div class="card-footer bg-info text-black">
+        <span th:text="${message}"></span>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var siteKey = /*[[${siteKey}]]*/ '';
+
+    grecaptcha.ready(function () {
+        document.getElementById('registrationForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var form = this;
+
+            grecaptcha.execute(siteKey, {action: 'submit'})
+                .then(function (token) {
+                    document.getElementById('g-recaptcha-response').value = token;
+                    form.submit();
+                });
+        });
+    });
+    /*]]>*/
+</script>
+
+</body>
+</html>

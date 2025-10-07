@@ -25,16 +25,12 @@
                 <div class="col-4">
                     <input class="form-control" th:field="*{email}" type="text"/>
                     <input th:field="*{version}" th:value="${version}" type="hidden"/>
-
-
                 </div>
             </div>
             <br/>
             <div class="row">
                 <div class="col-2"> Validate reCAPTCHA V2</div>
                 <div class="col-4">
-                    <!--                    <div class="g-recaptcha" data-sitekey="6LdzW5EUAAAAANBNd9GcxekgzLulPcLweZ6VpLp8"></div>-->
-                    <!--                    <div class="g-recaptcha" data-sitekey="6LdV3iMpAAAAAAslCB3z00nl_kfKjhTkmUACAhXM"></div>-->
                     <div class="g-recaptcha"
                          th:data-sitekey="${@environment.getProperty('google.recaptcha.v2.site.key')}"></div>
                 </div>
