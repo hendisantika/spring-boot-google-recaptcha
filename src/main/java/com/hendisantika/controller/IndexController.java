@@ -1,5 +1,6 @@
 package com.hendisantika.controller;
 
+import com.hendisantika.config.RecaptchaConfig;
 import com.hendisantika.dto.UserDTO;
 import com.hendisantika.entity.User;
 import com.hendisantika.service.UserService;
@@ -14,7 +15,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created by IntelliJ IDEA.
@@ -37,10 +43,14 @@ public class IndexController {
 
     private final UserService userService;
 
+    private final RecaptchaConfig recaptchaConfig;
+
     RestTemplateBuilder builder;
 
     @GetMapping
-    public String index() {
+    public String index(Model model) {
+        model.addAttribute("user", new User());
+        model.addAttribute("siteKey", recaptchaConfig.getV2SiteKey());
         return "index";
     }
 
